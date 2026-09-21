@@ -405,7 +405,7 @@
           <div class="fact"><strong>1</strong><span>Attempt</span></div>
         </div>
         <ul>
-          <li>Questions and answer choices may be shuffled.</li>
+          <li>Questions are shuffled, while answer choices remain in their original order.</li>
           <li>Select one answer per question.</li>
           <li>The quiz auto-submits when time expires.</li>
           <li>Do not refresh the browser after starting.</li>
@@ -617,9 +617,10 @@
         state.attemptId = data.attemptId;
         state.questions = (data.questions || []).map(normalizeQuestion);
 
-        if (data.shuffleQuestions) state.questions = shuffle(state.questions);
-        if (data.shuffleOptions) {
-          state.questions = state.questions.map(q => ({ ...q, options: shuffle(q.options) }));
+        // Shuffle only the order of questions.
+        // Keep options A, B, C and D in the exact order received from Excel.
+        if (data.shuffleQuestions) {
+          state.questions = shuffle(state.questions);
         }
 
         if (!state.questions.length) throw new Error('No active questions were returned for this episode.');
